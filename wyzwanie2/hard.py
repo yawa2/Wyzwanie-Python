@@ -9,30 +9,22 @@ from sqlalchemy.orm import sessionmaker
 
 
 def check_entry_type(entry):
-    if entry.is_symlink() is True:
+    if entry.is_symlink():
         return "o"
-    elif entry.is_file() is True:
+    elif entry.is_file():
         return "f"
-    elif entry.is_dir() is True:
+    elif entry.is_dir():
         return "d"
     else:
         return "o"
 
 
 def count_directory_contents(entry):
-    directory_contents = os.scandir(entry.path)
-    count = 0
-    for element in directory_contents:
-        count += 1
-    return count
+    return len(os.scandir(entry.path))
 
 
 def get_directory_size(entry):
-    directory_contents = os.scandir(entry.path)
-    size_count = 0
-    for item in directory_contents:
-        size_count += item.stat().st_size
-    return size_count
+    return sum(item.stat().st_size for item in os.scandir(entry.path))
 
 
 def get_checksum(entry):
